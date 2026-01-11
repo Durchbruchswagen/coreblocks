@@ -84,7 +84,6 @@ def create_data_input_layout(params: FPUParams):
     fpu_params; FPUParams
         FPU parameters
     """
-<<<<<<< HEAD
     return data.StructLayout(
         {
             "sign": 1,
@@ -96,10 +95,6 @@ def create_data_input_layout(params: FPUParams):
         }
     )
     
-=======
-
-
->>>>>>> c84e115 (Small changes)
 class IntConversionValues:
     """Various values for conversion from int to float
 
