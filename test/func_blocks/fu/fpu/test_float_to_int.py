@@ -1,9 +1,8 @@
 from coreblocks.func_blocks.fu.fpu.float_to_int import *
 from coreblocks.func_blocks.fu.fpu.fpu_common import FPUParams, RoundingModes, Errors
-from test.func_blocks.fu.fpu.fpu_test_common import ToFloatConverter
+from test.func_blocks.fu.fpu.fpu_test_common import ToFloatConverter, python_to_float
 from transactron.testing import *
 from amaranth import *
-import struct
 import random
 import ctypes
 from dataclasses import dataclass
@@ -119,16 +118,14 @@ class TestFTI(TestCaseWithSimulator):
                 op_sig = random.uniform(-(2 ** (63)), 2 ** (63) - 1)
                 op_unsig = random.uniform(0, 2 ** (63))
 
-                fl_sig = struct.unpack("f", struct.pack("f", op_sig))[0]
-                fl_unsig = struct.unpack("f", struct.pack("f", op_unsig))[0]
-                hex_sig = hex(struct.unpack("<I", struct.pack("<f", fl_sig))[0])
-                hex_unsig = hex(struct.unpack("<I", struct.pack("<f", fl_unsig))[0])
+                fl_sig = python_to_float(op_sig)
+                fl_unsig = python_to_float(op_unsig)
 
                 expected_value_sig = int(fl_sig)
                 expected_value_unsig = int(fl_unsig)
 
-                input_sig = converter.from_hex(hex_sig)
-                input_unsig = converter.from_hex(hex_unsig)
+                input_sig = converter.from_float(op_sig)
+                input_unsig = converter.from_float(op_unsig)
 
                 input_dict["op"] = input_sig
                 input_dict["signed"] = 1
