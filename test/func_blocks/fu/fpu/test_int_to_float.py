@@ -1,9 +1,8 @@
 from coreblocks.func_blocks.fu.fpu.int_to_float import *
 from coreblocks.func_blocks.fu.fpu.fpu_common import FPUParams, IntConversionValues, RoundingModes
-from test.func_blocks.fu.fpu.fpu_test_common import ToFloatConverter
+from test.func_blocks.fu.fpu.fpu_test_common import ToFloatConverter, python_to_float
 from transactron.testing import *
 from amaranth import *
-import struct
 import random
 
 
@@ -47,11 +46,7 @@ class TestComp(TestCaseWithSimulator):
 
                 input_dict = {}
                 op = random.randint(-(2 ** (63)), 2 ** (64) - 1)
-                expected_value = float(op)
-                fl = struct.unpack("f", struct.pack("f", expected_value))[0]
-                hex_r = hex(struct.unpack("<I", struct.pack("<f", fl))[0])
-
-                expected_resp = converter.from_hex(hex_r)
+                expected_resp = converter.from_float(python_to_float(op))
 
                 input_dict["op"] = op
                 input_dict["signed"] = 0 if op >= 0 else 1
